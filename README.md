@@ -77,34 +77,8 @@ src/
    npm run build
    ```
 
-## 📝 Available Commands
+<img width="1900" height="862" alt="image" src="https://github.com/user-attachments/assets/6b53d38b-d1d0-426a-88ff-cc2cb83fefc3" />
 
-- `npm run dev` - Start development server
-- `npm run build` - Create production build
-- `npm run preview` - Preview production build
-
-## 🔗 Routes
-
-- `/tasks` - View all tasks
-- `/tasks/new` - Create new task
-- `/tasks/:id` - View and edit task
-
-## 💾 Local Storage Schema
-
-Tasks are stored in localStorage under the key `tasks` as a JSON array:
-
-```javascript
-[
-  {
-    id: "1234567890",
-    title: "Task title",
-    description: "Task description",
-    createdAt: "2024-05-05T10:00:00.000Z",
-    updatedAt: "2024-05-05T10:00:00.000Z"
-  },
-  // ... more tasks
-]
-```
 
 
 
