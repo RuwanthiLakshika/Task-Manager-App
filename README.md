@@ -70,7 +70,7 @@ src/
    ```bash
    npm run dev
    ```
-   Opens at `http://localhost:5174`
+   Opens at `http://localhost:5173`
 
 3. **Build for production**
    ```bash
