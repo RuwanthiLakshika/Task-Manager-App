@@ -1,6 +1,7 @@
 import { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import useTasks from '../hooks/useTasks';
 
 
@@ -8,6 +9,9 @@ export const TasksPage = () => {
   const navigate = useNavigate();
   const { tasks, deleteTask, searchTasks } = useTasks();
   const [searchQuery, setSearchQuery] = useState('');
+  const [deleteConfirmId, setDeleteConfirmId] = useState(null);
+
+  const taskToDelete = deleteConfirmId ? tasks.find(t => t.id === deleteConfirmId) : null;
 
   const filteredTasks = useMemo(() => {
     return searchQuery ? searchTasks(searchQuery) : tasks;
@@ -15,6 +19,13 @@ export const TasksPage = () => {
 
   const handleDeleteTask = (taskId) => {
     deleteTask(taskId);
+    setDeleteConfirmId(null);
+  };
+
+  const handleConfirmDelete = () => {
+    if (deleteConfirmId) {
+      handleDeleteTask(deleteConfirmId);
+    }
   };
 
   const stats = {
@@ -133,7 +144,7 @@ export const TasksPage = () => {
                           ✏️ Edit
                         </button>
                         <button
-                          onClick={() => handleDeleteTask(task.id)}
+                          onClick={() => setDeleteConfirmId(task.id)}
                           className="inline px-3 py-2 text-red-600 hover:bg-red-100 rounded-lg transition-colors text-sm font-medium hover:scale-105"
                         >
                           🗑️ Delete
@@ -164,6 +175,43 @@ export const TasksPage = () => {
           </div>
         )}
       </div>
+
+      <Dialog open={!!deleteConfirmId} onOpenChange={(open) => !open && setDeleteConfirmId(null)}>
+        <DialogContent className="max-w-sm">
+          <DialogHeader>
+            <DialogTitle className="text-red-600 flex items-center gap-2">
+              🗑️ Delete Task
+            </DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <p className="text-slate-700">
+              Are you sure you want to delete this task?
+            </p>
+            {taskToDelete && (
+              <div className="bg-slate-100 rounded-lg p-3 border-l-4 border-red-500">
+                <p className="font-semibold text-slate-900">{taskToDelete.title}</p>
+                <p className="text-sm text-slate-600 mt-1">{taskToDelete.description}</p>
+              </div>
+            )}
+            <p className="text-sm text-slate-500">This action cannot be undone.</p>
+            <div className="flex gap-3 justify-end pt-2">
+              <Button
+                onClick={() => setDeleteConfirmId(null)}
+                variant="secondary"
+              >
+                Cancel
+              </Button>
+              <Button
+                onClick={handleConfirmDelete}
+                variant="destructive"
+                className="text-white"
+              >
+                Delete Task
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
