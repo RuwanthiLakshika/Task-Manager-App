@@ -57,6 +57,7 @@ export const TaskForm = ({ initialData = null, onSubmit }) => {
     const newErrors = validateForm();
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
+      setTouched({ title: true, description: true });
       return;
     }
 

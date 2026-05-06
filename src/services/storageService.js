@@ -17,47 +17,66 @@ export const storageService = {
   },
 
   addTask(task) {
-    const tasks = this.getTasks();
-    const newTask = {
-      id: Date.now().toString(),
-      ...task,
-      completed: task.completed || false,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    };
-    tasks.push(newTask);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
-    return newTask;
+    try {
+      const tasks = this.getTasks();
+      const newTask = {
+        id: Date.now().toString(),
+        ...task,
+        completed: task.completed || false,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      };
+      tasks.push(newTask);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
+      return newTask;
+    } catch (error) {
+      console.error('Error adding task to localStorage:', error);
+      return null;
+    }
   },
 
   updateTask(id, updates) {
-    const tasks = this.getTasks();
-    const taskIndex = tasks.findIndex(task => task.id === id);
-    
-    if (taskIndex === -1) return null;
-    
-    tasks[taskIndex] = {
-      ...tasks[taskIndex],
-      ...updates,
-      updatedAt: new Date().toISOString(),
-    };
-    
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
-    return tasks[taskIndex];
+    try {
+      const tasks = this.getTasks();
+      const taskIndex = tasks.findIndex(task => task.id === id);
+      
+      if (taskIndex === -1) return null;
+      
+      tasks[taskIndex] = {
+        ...tasks[taskIndex],
+        ...updates,
+        updatedAt: new Date().toISOString(),
+      };
+      
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
+      return tasks[taskIndex];
+    } catch (error) {
+      console.error('Error updating task in localStorage:', error);
+      return null;
+    }
   },
 
   deleteTask(id) {
-    const tasks = this.getTasks();
-    const filteredTasks = tasks.filter(task => task.id !== id);
-    
-    if (filteredTasks.length === tasks.length) return false;
-    
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(filteredTasks));
-    return true;
+    try {
+      const tasks = this.getTasks();
+      const filteredTasks = tasks.filter(task => task.id !== id);
+      
+      if (filteredTasks.length === tasks.length) return false;
+      
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(filteredTasks));
+      return true;
+    } catch (error) {
+      console.error('Error deleting task from localStorage:', error);
+      return false;
+    }
   },
 
   clearAllTasks() {
-    localStorage.removeItem(STORAGE_KEY);
+    try {
+      localStorage.removeItem(STORAGE_KEY);
+    } catch (error) {
+      console.error('Error clearing tasks from localStorage:', error);
+    }
   },
 };
 
